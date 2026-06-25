@@ -3,7 +3,6 @@ export default function sitemap() {
 
   const pages = [
     '',
-    '/dashboard',
     '/features',
     '/about',
     '/privacy',

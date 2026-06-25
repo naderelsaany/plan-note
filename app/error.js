@@ -4,7 +4,11 @@ import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { AlertTriangle } from 'lucide-react';
 
+import { useRouter } from 'next/navigation';
+
 export default function Error({ error, reset }) {
+  const router = useRouter();
+
   useEffect(() => {
     console.error('App error:', error);
   }, [error]);
@@ -18,7 +22,7 @@ export default function Error({ error, reset }) {
       </p>
       <div className="flex gap-3">
         <Button onClick={reset}>إعادة المحاولة</Button>
-        <Button variant="outline" onClick={() => (window.location.href = '/')}>
+        <Button variant="outline" onClick={() => router.push('/')}>
           العودة للرئيسية
         </Button>
       </div>

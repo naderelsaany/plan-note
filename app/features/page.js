@@ -54,8 +54,8 @@ export default function FeaturesPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {allFeatures.map((f, i) => (
-            <article key={i} className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100 text-center">
+          {allFeatures.map((f) => (
+            <article key={f.title} className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100 text-center">
               <div className="flex justify-center mb-4">{f.icon}</div>
               <h3 className="text-xl font-bold text-gray-800 mb-3">{f.title}</h3>
               <p className="text-gray-600 leading-relaxed">{f.desc}</p>
