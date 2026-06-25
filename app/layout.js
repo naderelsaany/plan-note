@@ -12,16 +12,39 @@ const cairo = Cairo({
 });
 
 export const metadata = {
+  metadataBase: new URL('https://plan-note-psi.vercel.app'),
   title: 'Plan+Note',
   description: 'تطبيق عربي متكامل يجمع بين الملاحظات النصية ولوحة التخطيط اللانهائية.',
   keywords: ['مفكرة', 'تطبيق ملاحظات عربي', 'لوحة تخطيط لا نهائية', 'Plan Note'],
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'Plan+Note — مفكرتك الذكية',
     description: 'نظّم أفكارك وخطّط مشاريعك باللغة العربية',
+    url: 'https://plan-note-psi.vercel.app',
+    siteName: 'Plan+Note',
     type: 'website',
     locale: 'ar_EG',
+    images: [
+      {
+        url: '/icon-512x512.png',
+        width: 512,
+        height: 512,
+        alt: 'Plan+Note Cover Image',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Plan+Note — مفكرتك الذكية',
+    description: 'نظّم أفكارك وخطّط مشاريعك باللغة العربية',
+    images: ['/icon-512x512.png'],
   },
   robots: { index: true, follow: true },
+  verification: {
+    google: 'cNHfGJiXXVT2uaJ8q7mofplDpWfTNvatP1Sqsz6syiU',
+  },
 };
 
 /**
