@@ -10,6 +10,15 @@ import { toast } from 'sonner';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FileText, Plus, Trash2, Edit3, LogOut, Loader2 } from 'lucide-react';
@@ -32,6 +41,10 @@ export default function DashboardPage() {
   const [newTitle, setNewTitle] = useState('');
   const [newType, setNewType] = useState('note');
   const [creating, setCreating] = useState(false);
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [docToDelete, setDocToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) router.push('/');
@@ -79,16 +92,29 @@ export default function DashboardPage() {
     }
   };
 
-  const handleDelete = async (docId) => {
-    if (!confirm('هل أنت متأكد من حذف هذا الملف؟')) return;
-    const { error } = await deleteDocument(docId);
+  const triggerDelete = (docId) => {
+    setDocToDelete(docId);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!docToDelete) return;
+    setIsDeleting(true);
+    const { error } = await deleteDocument(docToDelete);
+    setIsDeleting(false);
+    setDeleteDialogOpen(false);
+    
     if (error) {
       toast.error('خطأ في الحذف', {
         description: 'لم نتمكن من حذف الملف. ' + error,
       });
     } else {
-      setDocuments((prev) => prev.filter((d) => d.id !== docId));
+      setDocuments((prev) => prev.filter((d) => d.id !== docToDelete));
+      toast.success('تم الحذف', {
+        description: 'تم حذف الملف نهائياً بنجاح.',
+      });
     }
+    setDocToDelete(null);
   };
 
   const handleOpen = (doc) => {
@@ -178,7 +204,7 @@ export default function DashboardPage() {
                   <Button variant="ghost" size="sm" className="flex-1 text-blue-600" onClick={() => handleOpen(doc)}>
                     <Edit3 className="w-4 h-4 me-1" /> فتح
                   </Button>
-                  <Button variant="ghost" size="sm" className="flex-1 text-red-500" onClick={() => handleDelete(doc.id)}>
+                  <Button variant="ghost" size="sm" className="flex-1 text-red-500" onClick={() => triggerDelete(doc.id)}>
                     <Trash2 className="w-4 h-4 me-1" /> حذف
                   </Button>
                 </div>
@@ -236,6 +262,24 @@ export default function DashboardPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent dir="rtl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-right">تأكيد حذف الملف</AlertDialogTitle>
+            <AlertDialogDescription className="text-right mt-2 text-gray-500">
+              هل أنت متأكد من قرارك؟ سيتم حذف هذا الملف نهائياً ولا يمكن التراجع عن هذا الإجراء بأي شكل.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex gap-2 flex-row-reverse sm:justify-start mt-4">
+            <Button variant="destructive" onClick={confirmDelete} disabled={isDeleting}>
+              {isDeleting ? <Loader2 className="w-4 h-4 animate-spin me-2" /> : <Trash2 className="w-4 h-4 me-2" />}
+              نعم، احذف نهائياً
+            </Button>
+            <AlertDialogCancel disabled={isDeleting}>إلغاء الأمر</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
