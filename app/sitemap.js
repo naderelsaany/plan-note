@@ -1,18 +1,23 @@
 export default function sitemap() {
   const baseUrl = 'https://plan-note-psi.vercel.app';
 
-  return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/dashboard`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
+  const pages = [
+    '',
+    '/dashboard',
+    '/features',
+    '/about',
+    '/privacy',
+    '/terms',
+    '/blog',
+    '/blog/best-note-taking-methods-2026',
+    '/blog/linear-notes-vs-mindmaps',
+    '/blog/how-to-build-pwa',
   ];
+
+  return pages.map((page) => ({
+    url: `${baseUrl}${page}`,
+    lastModified: new Date(),
+    changeFrequency: page === '' || page === '/blog' ? 'weekly' : 'monthly',
+    priority: page === '' ? 1 : page.startsWith('/blog/') ? 0.7 : 0.8,
+  }));
 }

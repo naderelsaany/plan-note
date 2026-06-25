@@ -14,21 +14,21 @@ export default function BlogPage() {
       title: 'أفضل طرق تدوين الملاحظات في 2026',
       excerpt: 'تعرف على أحدث الاستراتيجيات لترتيب أفكارك وزيادة إنتاجيتك باستخدام الملاحظات الرقمية.',
       date: '25 يونيو 2026',
-      slug: '#',
+      slug: '/blog/best-note-taking-methods-2026',
     },
     {
       id: 2,
       title: 'الفرق بين الملاحظات الخطية والخرائط الذهنية',
       excerpt: 'متى يجب أن تستخدم الملاحظات النصية ومتى تنتقل إلى لوحة التخطيط البصري؟',
       date: '20 يونيو 2026',
-      slug: '#',
+      slug: '/blog/linear-notes-vs-mindmaps',
     },
     {
       id: 3,
       title: 'كيف تبني تطبيق PWA ناجح؟',
       excerpt: 'نظرة تقنية وراء الكواليس لكيفية بناء تطبيق Plan+Note كـ Progressive Web App.',
       date: '15 يونيو 2026',
-      slug: '#',
+      slug: '/blog/how-to-build-pwa',
     },
   ];
 
