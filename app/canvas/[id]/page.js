@@ -12,7 +12,7 @@ import { ArrowRight, Download, Save, Loader2, CheckCircle } from 'lucide-react';
 
 // ⚠️ ضروري: Excalidraw لا يعمل مع SSR (يستخدم window)
 const Excalidraw = dynamic(
-  () => import('@excalidraw/excalidraw').then((mod) => mod.Excalidraw),
+  () => import('@/components/ExcalidrawWrapper'),
   {
     ssr: false,
     loading: () => (
@@ -115,7 +115,7 @@ export default function CanvasPage() {
     autoSaveTimer.current = setTimeout(() => handleSave(), 2000);
   }, [handleSave]);
 
-  const handleExportToMD = async () => {
+  const handleExportDual = async () => {
     if (!excalidrawAPI) return;
     setExporting(true);
     try {
@@ -123,9 +123,9 @@ export default function CanvasPage() {
       const appState = excalidrawAPI.getAppState();
       const files = excalidrawAPI.getFiles();
 
-      // ⚠️ استيراد ديناميكي داخل الدالة — الطريقة الصحيحة الوحيدة مع SSR
-      const { exportToSvg } = await import('@excalidraw/excalidraw');
+      const { exportToSvg, exportToBlob } = await import('@excalidraw/excalidraw');
 
+      // Export MD
       const svgElement = await exportToSvg({
         elements,
         appState: { ...appState, exportWithDarkMode: false },
@@ -146,8 +146,27 @@ export default function CanvasPage() {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+
+      // Export PNG
+      const pngBlob = await exportToBlob({
+        elements,
+        appState: { ...appState, exportWithDarkMode: false },
+        files,
+        mimeType: 'image/png',
+      });
+      const pngUrl = URL.createObjectURL(pngBlob);
+      const aPng = document.createElement('a');
+      aPng.href = pngUrl;
+      aPng.download = `${title.replace(/\s+/g, '-')}.png`;
+      document.body.appendChild(aPng);
+      aPng.click();
+      document.body.removeChild(aPng);
+      URL.revokeObjectURL(pngUrl);
+
+      toast.success('تم التصدير بنجاح', { description: 'تم تنزيل اللوحة بصيغتي MD و PNG.' });
     } catch (e) {
       console.error('Export error:', e);
+      toast.error('خطأ', { description: 'حدث خطأ أثناء التصدير.' });
     }
     setExporting(false);
   };
@@ -170,9 +189,9 @@ export default function CanvasPage() {
             <Button variant="outline" size="sm" onClick={handleSave} disabled={saving}>
               <Save className="w-4 h-4 me-1" /> حفظ
             </Button>
-            <Button size="sm" onClick={handleExportToMD} disabled={exporting}>
+            <Button size="sm" onClick={handleExportDual} disabled={exporting}>
               {exporting ? <Loader2 className="w-4 h-4 me-1 animate-spin" /> : <Download className="w-4 h-4 me-1" />}
-              تصدير MD
+              تصدير (MD + PNG)
             </Button>
           </div>
         </div>
@@ -183,14 +202,14 @@ export default function CanvasPage() {
           excalidrawAPI={(api) => setExcalidrawAPI(api)}
           initialData={getInitialData()}
           onChange={handleChange}
-          langCode="ar"
+          langCode="ar-SA"
           theme="light"
           UIOptions={{
             canvasActions: {
               export: false,
               loadScene: false,
               saveToActiveFile: false,
-              saveAsImage: true,
+              saveAsImage: false,
               toggleTheme: false,
             },
           }}
