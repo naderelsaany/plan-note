@@ -19,10 +19,13 @@ export default function NotePage() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const autoSaveTimer = useRef(null);
+  const saveTimeout = useRef(null);
 
   useEffect(() => {
-    if (!loading && !user) router.push('/');
-  }, [user, loading, router]);
+    return () => {
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (user && id) {
@@ -70,7 +73,8 @@ export default function NotePage() {
     setSaving(false);
     setSaved(true);
     setHasUnsavedChanges(false);
-    setTimeout(() => setSaved(false), 2000);
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    saveTimeout.current = setTimeout(() => setSaved(false), 2000);
   }, [id]);
 
   const handleChange = (e) => {
@@ -83,6 +87,13 @@ export default function NotePage() {
     autoSaveTimer.current = setTimeout(() => handleSave(val), 1500);
   };
 
+  const handleBack = async () => {
+    if (hasUnsavedChanges) {
+      await handleSave(content);
+    }
+    router.push('/dashboard');
+  };
+
   if (loading || fetchLoading) {
     return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-8 h-8 animate-spin text-blue-500" /></div>;
   }
@@ -91,7 +102,7 @@ export default function NotePage() {
     <div className="min-h-screen bg-white flex flex-col" dir="rtl">
       <header className="border-b border-gray-200 bg-white sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between gap-4">
-          <Button variant="ghost" size="sm" onClick={() => router.push('/dashboard')}>
+          <Button variant="ghost" size="sm" onClick={handleBack}>
             <ArrowRight className="w-4 h-4 me-2" /> رجوع
           </Button>
           <h1 className="font-semibold text-gray-800 truncate flex-1 text-center">{docData?.title}</h1>

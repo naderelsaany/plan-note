@@ -1,0 +1,1 @@
+Encountered error in step execution: Permission prompt for action 'command' on target 'npm run lint' timed out waiting for user response. The user was not able to provide permission on time.

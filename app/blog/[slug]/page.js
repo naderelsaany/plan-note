@@ -5,6 +5,20 @@ import fs from 'fs';
 import path from 'path';
 import ReactMarkdown from 'react-markdown';
 
+export async function generateStaticParams() {
+  try {
+    const blogDir = path.join(process.cwd(), 'content', 'blog');
+    const files = fs.readdirSync(blogDir);
+    return files
+      .filter(file => file.endsWith('.md'))
+      .map(file => ({
+        slug: file.replace('.md', ''),
+      }));
+  } catch (e) {
+    return [];
+  }
+}
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const metadataMap = {

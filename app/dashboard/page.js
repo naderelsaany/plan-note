@@ -46,9 +46,6 @@ export default function DashboardPage() {
   const [docToDelete, setDocToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  useEffect(() => {
-    if (!loading && !user) router.push('/');
-  }, [user, loading, router]);
 
   useEffect(() => {
     if (user) fetchDocs();
@@ -194,7 +191,7 @@ export default function DashboardPage() {
                       {doc.type === 'canvas' ? 'لوحة تخطيط' : 'ملاحظة نصية'}
                     </p>
                     {doc.updatedAt?.toDate && (
-                      <p className="text-[11px] text-gray-300 mt-1">
+                      <p className="text-[11px] text-gray-400 mt-1">
                         آخر تعديل: {formatDate(doc.updatedAt.toDate())}
                       </p>
                     )}

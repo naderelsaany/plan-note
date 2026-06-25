@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // قواعد حماية المستندات (الملاحظات واللوحات)
+    match /documents/{docId} {
+      // القراءة والكتابة مسموحة فقط لصاحب المستند
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+      // الإنشاء مسموح إذا كان اليوزر الممرر يطابق المستخدم المصادق
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    // قواعد حماية ملفات المستخدمين التعريفية
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+  }
+}

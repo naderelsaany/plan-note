@@ -1,7 +1,7 @@
 'use client';
 
 import '@excalidraw/excalidraw/index.css';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDocument, updateDocument } from '@/lib/firestore';
@@ -35,7 +35,7 @@ const compressFiles = async (files) => {
   if (!files) return {};
   const compressed = { ...files };
   for (const [fileId, fileData] of Object.entries(compressed)) {
-    if (fileData.mimeType && fileData.mimeType.startsWith('image/') && fileData.dataURL) {
+    if (fileData.mimeType && fileData.mimeType.startsWith('image/') && fileData.dataURL && !fileData.isCompressed) {
       // 0.75 ratio for base64
       const approxSize = fileData.dataURL.length * 0.75;
       if (approxSize > 400 * 1024) { // إذا تجاوزت الصورة 400 كيلوبايت يتم ضغطها
@@ -53,10 +53,13 @@ const compressFiles = async (files) => {
             reader.readAsDataURL(compressedBlob);
             reader.onloadend = () => resolve(reader.result);
           });
-          compressed[fileId] = { ...fileData, dataURL: base64data };
+          compressed[fileId] = { ...fileData, dataURL: base64data, isCompressed: true };
         } catch (err) {
           console.error("Compression error:", err);
         }
+      } else {
+        // نضع علامة أنها لا تحتاج لضغط لتجاوزها في المرات القادمة
+        compressed[fileId] = { ...fileData, isCompressed: true };
       }
     }
   }
@@ -76,10 +79,14 @@ export default function CanvasPage() {
   const [exportModalOpen, setExportModalOpen] = useState(false);
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
   const autoSaveTimer = useRef(null);
+  const saveTimeout = useRef(null);
+  const prevElementsRef = useRef(null);
 
   useEffect(() => {
-    if (!loading && !user) router.push('/');
-  }, [user, loading, router]);
+    return () => {
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (user && id) {
@@ -119,7 +126,7 @@ export default function CanvasPage() {
     setFetchLoading(false);
   };
 
-  const getInitialData = () => {
+  const initialData = useMemo(() => {
     if (!docData?.content) return undefined;
     try {
       const parsed = JSON.parse(docData.content);
@@ -131,7 +138,7 @@ export default function CanvasPage() {
     } catch {
       return undefined;
     }
-  };
+  }, [docData?.content]);
 
   const handleSave = useCallback(async () => {
     if (!excalidrawAPI) return;
@@ -153,16 +160,27 @@ export default function CanvasPage() {
     setSaving(false);
     setSaved(true);
     setHasUnsavedChanges(false);
-    setTimeout(() => setSaved(false), 2000);
+    if (saveTimeout.current) clearTimeout(saveTimeout.current);
+    saveTimeout.current = setTimeout(() => setSaved(false), 2000);
   }, [id, excalidrawAPI]);
 
-  const handleChange = useCallback(() => {
+  const handleChange = useCallback((elements, appState) => {
+    // تخطي التحديث إذا كان مجرد تحريك/زوم
+    if (elements === prevElementsRef.current) return;
+    prevElementsRef.current = elements;
+
     setSaved(false);
     setHasUnsavedChanges(true);
     if (autoSaveTimer.current) clearTimeout(autoSaveTimer.current);
-    // حفظ تلقائي بعد 2 ثانية من آخر تغيير
     autoSaveTimer.current = setTimeout(() => handleSave(), 2000);
   }, [handleSave]);
+
+  const handleBack = async () => {
+    if (hasUnsavedChanges) {
+      await handleSave();
+    }
+    router.push('/dashboard');
+  };
 
   const handleExport = async (type) => {
     if (!excalidrawAPI) return;
@@ -231,7 +249,7 @@ export default function CanvasPage() {
     <div className="h-screen flex flex-col bg-white" dir="rtl">
       <header className="border-b border-gray-200 bg-white z-10 flex-shrink-0">
         <div className="px-4 h-14 flex items-center justify-between gap-4">
-          <Button variant="ghost" size="sm" onClick={() => router.push('/dashboard')}>
+          <Button variant="ghost" size="sm" onClick={handleBack}>
             <ArrowRight className="w-4 h-4 me-2" /> رجوع
           </Button>
           <h1 className="font-semibold text-gray-800 truncate flex-1 text-center">{docData?.title}</h1>
@@ -252,7 +270,7 @@ export default function CanvasPage() {
       <div className="flex-1 overflow-hidden">
         <Excalidraw
           excalidrawAPI={(api) => setExcalidrawAPI(api)}
-          initialData={getInitialData()}
+          initialData={initialData}
           onChange={handleChange}
           langCode="ar-SA"
           theme="light"

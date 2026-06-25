@@ -49,7 +49,7 @@ module.exports = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        arabic: ['Cairo', 'sans-serif'],
+        arabic: ['var(--font-cairo)', 'sans-serif'],
       },
     },
   },
