@@ -24,6 +24,17 @@ export const metadata = {
   robots: { index: true, follow: true },
 };
 
+/**
+ * RootLayout Component
+ * 
+ * Acts as the top-level wrapper for the entire Next.js application.
+ * It configures the Arabic font (Cairo), sets the RTL text direction,
+ * and initializes the AuthProvider and Toaster components.
+ * 
+ * @param {Object} props - The component props.
+ * @param {React.ReactNode} props.children - The child components to render.
+ * @returns {JSX.Element} The global HTML structure.
+ */
 export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl" className={cairo.variable}>

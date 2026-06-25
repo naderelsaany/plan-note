@@ -34,6 +34,14 @@ export const metadata = {
   description: 'مفكرة ذكية تجمع الكتابة الحرة ولوحة التخطيط البصري اللانهائية. بالعربية.',
 };
 
+/**
+ * LandingPage Component
+ * 
+ * Renders the main landing page of the Plan+Note application.
+ * It includes the hero section, features list, FAQs, and authentication buttons.
+ * 
+ * @returns {JSX.Element} The rendered landing page.
+ */
 export default function LandingPage() {
   const currentYear = new Date().getFullYear();
 

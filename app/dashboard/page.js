@@ -14,7 +14,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FileText, Plus, Trash2, Edit3, LogOut, Loader2 } from 'lucide-react';
 
-export default function Dashboard() {
+/**
+ * DashboardPage Component
+ * 
+ * Renders the main dashboard for authenticated users.
+ * Displays a list of their notes and canvas files, providing options
+ * to create new files, rename them, or delete them.
+ * 
+ * @returns {JSX.Element|null} The rendered dashboard or null if loading/unauthenticated.
+ */
+export default function DashboardPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [documents, setDocuments] = useState([]);
