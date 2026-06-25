@@ -11,6 +11,8 @@ export default function sitemap() {
     '/blog/best-note-taking-methods-2026',
     '/blog/linear-notes-vs-mindmaps',
     '/blog/how-to-build-pwa',
+    '/blog/best-arabic-note-apps',
+    '/blog/free-planning-tools',
   ];
 
   return pages.map((page) => ({

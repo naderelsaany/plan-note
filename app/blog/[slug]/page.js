@@ -3,10 +3,40 @@ import { MarketingFooter } from '@/components/marketing-footer';
 import Link from 'next/link';
 
 export async function generateMetadata({ params }) {
-  // In a real app, you would fetch the post by params.slug and return dynamic metadata.
-  return {
+  const metadataMap = {
+    'best-note-taking-methods-2026': {
+      title: 'أفضل طرق تدوين الملاحظات في 2026 | Plan+Note',
+      description: 'اكتشف أفضل طرق تدوين الملاحظات في 2026: من الطرق التقليدية إلى الرقمية، وكيف تختار الطريقة المناسبة لك.',
+    },
+    'linear-notes-vs-mindmaps': {
+      title: 'الفرق بين الملاحظات الخطية والخرائط الذهنية | Plan+Note',
+      description: 'مقارنة شاملة بين الملاحظات الخطية والخرائط الذهنية: أيهما أفضل للتنظيم والإبداع؟',
+    },
+    'how-to-build-pwa': {
+      title: 'كيف تبني تطبيق PWA ناجح؟ دليل شامل 2026 | Plan+Note',
+      description: 'دليل خطوة بخطوة لبناء تطبيق PWA ناجح: من المفهوم إلى النشر مع أفضل الممارسات.',
+    },
+    'best-arabic-note-apps': {
+      title: 'أفضل تطبيقات الملاحظات العربية في 2026 | Plan+Note',
+      description: 'مقارنة بين أفضل تطبيقات الملاحظات العربية المتاحة في 2026 مع مميزات وعيوب كل تطبيق.',
+    },
+    'free-planning-tools': {
+      title: 'أفضل أدوات التخطيط المجانية للمشاريع الصغيرة | Plan+Note',
+      description: 'دليل بأفضل أدوات التخطيط المجانية للمشاريع الصغيرة والأفراد مع نصائح للاستخدام الأمثل.',
+    }
+  };
+
+  const meta = metadataMap[params.slug] || {
     title: `المقال | Plan+Note`,
     description: 'مقال تفصيلي من مدونة تطبيق Plan+Note.',
+  };
+
+  return {
+    title: meta.title,
+    description: meta.description,
+    alternates: {
+      canonical: `https://plan-note-psi.vercel.app/blog/${params.slug}`
+    }
   };
 }
 
