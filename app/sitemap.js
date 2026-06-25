@@ -13,6 +13,11 @@ export default function sitemap() {
     '/blog/how-to-build-pwa',
     '/blog/best-arabic-note-apps',
     '/blog/free-planning-tools',
+    '/blog/mindmap-productivity-impact',
+    '/blog/time-management-for-students-and-employees',
+    '/blog/visual-organization-power',
+    '/blog/productivity-tools-guide-2026',
+    '/blog/turning-ideas-into-action-plans',
   ];
 
   return pages.map((page) => ({

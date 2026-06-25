@@ -1,6 +1,9 @@
 import { MarketingHeader } from '@/components/marketing-header';
 import { MarketingFooter } from '@/components/marketing-footer';
 import Link from 'next/link';
+import fs from 'fs';
+import path from 'path';
+import ReactMarkdown from 'react-markdown';
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -24,6 +27,26 @@ export async function generateMetadata({ params }) {
     'free-planning-tools': {
       title: 'أفضل أدوات التخطيط المجانية للمشاريع الصغيرة | Plan+Note',
       description: 'دليل بأفضل أدوات التخطيط المجانية للمشاريع الصغيرة والأفراد مع نصائح للاستخدام الأمثل.',
+    },
+    'mindmap-productivity-impact': {
+      title: 'تأثير الخرائط الذهنية على الإنتاجية | Plan+Note',
+      description: 'استكشف السر العلمي وراء الخرائط الذهنية وكيف تساعد دماغك على مضاعفة سرعته وإنتاجيته.',
+    },
+    'time-management-for-students-and-employees': {
+      title: 'كيفية إدارة الوقت بفعالية للطلاب والموظفين | Plan+Note',
+      description: 'استراتيجيات عملية لعام 2026 للتغلب على ضيق الوقت والموازنة بين العمل والحياة الشخصية.',
+    },
+    'visual-organization-power': {
+      title: 'قوة التنظيم البصري للمعلومات | Plan+Note',
+      description: 'كيف تفكر وتخطط بعينيك؟ فوائد استخدام المخططات واللوحات اللانهائية في تبسيط المعلومات.',
+    },
+    'productivity-tools-guide-2026': {
+      title: 'دليل شامل لأدوات الإنتاجية في 2026 | Plan+Note',
+      description: 'كيف تبني نظام تشغيل شخصي متكامل لزيادة الإنتاجية وتقليل التشتت بين التطبيقات؟',
+    },
+    'turning-ideas-into-action-plans': {
+      title: 'كيفية تحويل الأفكار إلى خطط عمل قابلة للتنفيذ | Plan+Note',
+      description: 'خطوات عملية لتحويل الأفكار العشوائية من مجرد أحلام إلى خطط عمل واضحة باستخدام أدوات ذكية.',
     }
   };
 
@@ -44,6 +67,14 @@ export async function generateMetadata({ params }) {
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
   
+  const contentPath = path.join(process.cwd(), 'content', 'blog', `${slug}.md`);
+  let content = '';
+  try {
+    content = fs.readFileSync(contentPath, 'utf8');
+  } catch (error) {
+    content = '# عذراً، المقال غير متوفر حالياً\nهذا المقال قيد الكتابة وسيكون متاحاً قريباً.';
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col" dir="rtl">
       <MarketingHeader />
@@ -52,20 +83,8 @@ export default async function BlogPostPage({ params }) {
         <Link href="/blog" className="text-blue-600 hover:underline mb-8 inline-block font-bold">
           &rarr; العودة للمدونة
         </Link>
-        <article className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 prose prose-blue prose-lg max-w-none">
-          <span className="text-gray-500 font-bold mb-4 block">25 يونيو 2026</span>
-          <h1 className="text-4xl font-bold text-gray-900 mb-8">
-            محتوى المقال (تجريبي): {slug.split('-').join(' ')}
-          </h1>
-          
-          <p className="text-gray-700 leading-relaxed mb-6">
-            هذا محتوى تجريبي للمقال لكي تظهر الصفحة في نتائج بحث جوجل كصفحة مستقلة (Dynamic Route). 
-            في المستقبل، سيتم ربط هذه الصفحة بقاعدة بيانات مثل Firebase أو CMS حقيقي لجلب محتوى كل مقالة ديناميكياً بناءً على الرابط الخاص بها.
-          </p>
-          
-          <p className="text-gray-700 leading-relaxed">
-            الهدف الحالي من هذه الصفحة هو تطبيق توصيات الـ SEO بجعل كل مقالة تملك عنوان URL مستقل (مثل `/blog/slug`) حتى يزحف إليها Googlebot بنجاح، بدلاً من تكدس كل شيء في صفحة المدونة الرئيسية.
-          </p>
+        <article className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 prose prose-blue prose-lg max-w-none prose-headings:text-gray-900 prose-a:text-blue-600 hover:prose-a:underline">
+          <ReactMarkdown>{content}</ReactMarkdown>
         </article>
       </main>
 
