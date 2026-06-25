@@ -24,7 +24,10 @@ export function LandingAuthButton({ variant = 'default', size = 'sm', className 
   const router = useRouter();
   const [signingIn, setSigningIn] = useState(false);
 
+  const [isMounted, setIsMounted] = useState(false);
+
   useEffect(() => {
+    setIsMounted(true);
     if (!loading && user) router.push('/dashboard');
   }, [user, loading, router]);
 
@@ -49,10 +52,11 @@ export function LandingAuthButton({ variant = 'default', size = 'sm', className 
     }
   };
 
-  if (loading) {
+  if (!isMounted || loading) {
     return (
-      <Button variant={variant} size={size} className={className} disabled>
-        <Loader2 className="w-4 h-4 animate-spin" />
+      <Button variant={variant} size={size} className={className}>
+        {showIcon ? <GoogleIcon /> : null}
+        {text}
       </Button>
     );
   }
