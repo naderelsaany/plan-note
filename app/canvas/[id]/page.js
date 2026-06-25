@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { ArrowRight, Download, Save, Loader2, CheckCircle } from 'lucide-react';
+import imageCompression from 'browser-image-compression';
 
 // ⚠️ ضروري: Excalidraw لا يعمل مع SSR (يستخدم window)
 const Excalidraw = dynamic(
@@ -22,6 +23,38 @@ const Excalidraw = dynamic(
     ),
   }
 );
+
+const compressFiles = async (files) => {
+  if (!files) return {};
+  const compressed = { ...files };
+  for (const [fileId, fileData] of Object.entries(compressed)) {
+    if (fileData.mimeType && fileData.mimeType.startsWith('image/') && fileData.dataURL) {
+      // 0.75 ratio for base64
+      const approxSize = fileData.dataURL.length * 0.75;
+      if (approxSize > 400 * 1024) { // إذا تجاوزت الصورة 400 كيلوبايت يتم ضغطها
+        try {
+          const res = await fetch(fileData.dataURL);
+          const blob = await res.blob();
+          const options = {
+            maxSizeMB: 0.4,
+            maxWidthOrHeight: 1200,
+            useWebWorker: true,
+          };
+          const compressedBlob = await imageCompression(blob, options);
+          const reader = new FileReader();
+          const base64data = await new Promise((resolve) => {
+            reader.readAsDataURL(compressedBlob);
+            reader.onloadend = () => resolve(reader.result);
+          });
+          compressed[fileId] = { ...fileData, dataURL: base64data };
+        } catch (err) {
+          console.error("Compression error:", err);
+        }
+      }
+    }
+  }
+  return compressed;
+};
 
 export default function CanvasPage() {
   const { user, loading } = useAuth();
@@ -85,6 +118,7 @@ export default function CanvasPage() {
       return {
         elements: parsed.elements || [],
         appState: { viewBackgroundColor: parsed.appState?.viewBackgroundColor || '#ffffff' },
+        files: parsed.files || {},
       };
     } catch {
       return undefined;
@@ -96,10 +130,17 @@ export default function CanvasPage() {
     setSaving(true);
     const elements = excalidrawAPI.getSceneElements();
     const appState = excalidrawAPI.getAppState();
+    const rawFiles = excalidrawAPI.getFiles();
+    
+    // ضغط الصور الذكي قبل الحفظ
+    const files = await compressFiles(rawFiles);
+
     const content = JSON.stringify({
       elements,
       appState: { viewBackgroundColor: appState.viewBackgroundColor },
+      files,
     });
+    
     await updateDocument(id, content);
     setSaving(false);
     setSaved(true);
