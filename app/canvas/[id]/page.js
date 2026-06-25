@@ -9,6 +9,13 @@ import dynamic from 'next/dynamic';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { ArrowRight, Download, Save, Loader2, CheckCircle } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import imageCompression from 'browser-image-compression';
 
 // ⚠️ ضروري: Excalidraw لا يعمل مع SSR (يستخدم window)
@@ -66,6 +73,7 @@ export default function CanvasPage() {
   const [saved, setSaved] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [exportModalOpen, setExportModalOpen] = useState(false);
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
   const autoSaveTimer = useRef(null);
 
@@ -156,55 +164,58 @@ export default function CanvasPage() {
     autoSaveTimer.current = setTimeout(() => handleSave(), 2000);
   }, [handleSave]);
 
-  const handleExportDual = async () => {
+  const handleExport = async (type) => {
     if (!excalidrawAPI) return;
     setExporting(true);
+    setExportModalOpen(false);
     try {
       const elements = excalidrawAPI.getSceneElements();
       const appState = excalidrawAPI.getAppState();
       const files = excalidrawAPI.getFiles();
 
       const { exportToSvg, exportToBlob } = await import('@excalidraw/excalidraw');
-
-      // Export MD
-      const svgElement = await exportToSvg({
-        elements,
-        appState: { ...appState, exportWithDarkMode: false },
-        files,
-      });
-
-      const svgString = new XMLSerializer().serializeToString(svgElement);
       const title = docData?.title || 'canvas';
-      const date = new Date().toLocaleDateString('ar-EG');
-      const mdContent = `# ${title}\n\n> تاريخ التصدير: ${date}\n\n## اللوحة\n\n${svgString}\n`;
 
-      const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${title.replace(/\s+/g, '-')}.md`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      if (type === 'md' || type === 'both') {
+        const svgElement = await exportToSvg({
+          elements,
+          appState: { ...appState, exportWithDarkMode: false },
+          files,
+        });
 
-      // Export PNG
-      const pngBlob = await exportToBlob({
-        elements,
-        appState: { ...appState, exportWithDarkMode: false },
-        files,
-        mimeType: 'image/png',
-      });
-      const pngUrl = URL.createObjectURL(pngBlob);
-      const aPng = document.createElement('a');
-      aPng.href = pngUrl;
-      aPng.download = `${title.replace(/\s+/g, '-')}.png`;
-      document.body.appendChild(aPng);
-      aPng.click();
-      document.body.removeChild(aPng);
-      URL.revokeObjectURL(pngUrl);
+        const svgString = new XMLSerializer().serializeToString(svgElement);
+        const date = new Date().toLocaleDateString('ar-EG');
+        const mdContent = `# ${title}\n\n> تاريخ التصدير: ${date}\n\n## اللوحة\n\n${svgString}\n`;
 
-      toast.success('تم التصدير بنجاح', { description: 'تم تنزيل اللوحة بصيغتي MD و PNG.' });
+        const blob = new Blob([mdContent], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${title.replace(/\s+/g, '-')}.md`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      if (type === 'png' || type === 'both') {
+        const pngBlob = await exportToBlob({
+          elements,
+          appState: { ...appState, exportWithDarkMode: false },
+          files,
+          mimeType: 'image/png',
+        });
+        const pngUrl = URL.createObjectURL(pngBlob);
+        const aPng = document.createElement('a');
+        aPng.href = pngUrl;
+        aPng.download = `${title.replace(/\s+/g, '-')}.png`;
+        document.body.appendChild(aPng);
+        aPng.click();
+        document.body.removeChild(aPng);
+        URL.revokeObjectURL(pngUrl);
+      }
+
+      toast.success('تم التصدير بنجاح', { description: 'تم تنزيل اللوحة.' });
     } catch (e) {
       console.error('Export error:', e);
       toast.error('خطأ', { description: 'حدث خطأ أثناء التصدير.' });
@@ -230,9 +241,9 @@ export default function CanvasPage() {
             <Button variant="outline" size="sm" onClick={handleSave} disabled={saving}>
               <Save className="w-4 h-4 me-1" /> حفظ
             </Button>
-            <Button size="sm" onClick={handleExportDual} disabled={exporting}>
+            <Button size="sm" onClick={() => setExportModalOpen(true)} disabled={exporting}>
               {exporting ? <Loader2 className="w-4 h-4 me-1 animate-spin" /> : <Download className="w-4 h-4 me-1" />}
-              تصدير (MD + PNG)
+              تصدير
             </Button>
           </div>
         </div>
@@ -256,6 +267,31 @@ export default function CanvasPage() {
           }}
         />
       </div>
+
+      <Dialog open={exportModalOpen} onOpenChange={setExportModalOpen}>
+        <DialogContent className="sm:max-w-[425px]" dir="rtl">
+          <DialogHeader>
+            <DialogTitle>خيارات التصدير</DialogTitle>
+            <DialogDescription>
+              اختر الصيغة التي تريد تصدير اللوحة بها.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-3 py-4">
+            <Button variant="outline" onClick={() => handleExport('png')} className="flex items-center justify-center gap-2 h-12 text-base font-medium">
+              <Download className="w-5 h-5 text-blue-500" />
+              تصدير كصورة (PNG)
+            </Button>
+            <Button variant="outline" onClick={() => handleExport('md')} className="flex items-center justify-center gap-2 h-12 text-base font-medium">
+              <Download className="w-5 h-5 text-green-500" />
+              تصدير كنص (Markdown)
+            </Button>
+            <Button variant="outline" onClick={() => handleExport('both')} className="flex items-center justify-center gap-2 h-12 text-base font-medium">
+              <Download className="w-5 h-5 text-purple-500" />
+              تصدير كلاهما معاً
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
