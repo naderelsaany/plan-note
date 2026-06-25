@@ -3,6 +3,7 @@ import { MarketingFooter } from '@/components/marketing-footer';
 import Link from 'next/link';
 
 export async function generateMetadata({ params }) {
+  const { slug } = await params;
   const metadataMap = {
     'best-note-taking-methods-2026': {
       title: 'أفضل طرق تدوين الملاحظات في 2026 | Plan+Note',
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }) {
     }
   };
 
-  const meta = metadataMap[params.slug] || {
+  const meta = metadataMap[slug] || {
     title: `المقال | Plan+Note`,
     description: 'مقال تفصيلي من مدونة تطبيق Plan+Note.',
   };
@@ -35,12 +36,14 @@ export async function generateMetadata({ params }) {
     title: meta.title,
     description: meta.description,
     alternates: {
-      canonical: `https://plan-note-psi.vercel.app/blog/${params.slug}`
+      canonical: `https://plan-note-psi.vercel.app/blog/${slug}`
     }
   };
 }
 
-export default function BlogPostPage({ params }) {
+export default async function BlogPostPage({ params }) {
+  const { slug } = await params;
+  
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col" dir="rtl">
       <MarketingHeader />
@@ -52,7 +55,7 @@ export default function BlogPostPage({ params }) {
         <article className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 prose prose-blue prose-lg max-w-none">
           <span className="text-gray-500 font-bold mb-4 block">25 يونيو 2026</span>
           <h1 className="text-4xl font-bold text-gray-900 mb-8">
-            محتوى المقال (تجريبي): {params.slug.split('-').join(' ')}
+            محتوى المقال (تجريبي): {slug.split('-').join(' ')}
           </h1>
           
           <p className="text-gray-700 leading-relaxed mb-6">
