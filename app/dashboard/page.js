@@ -117,7 +117,10 @@ export default function Dashboard() {
             <LogOut className="w-4 h-4 me-2" />
             خروج
           </Button>
-          <span className="text-lg font-bold text-blue-600">Plan+Note</span>
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="Plan+Note" className="w-6 h-6 rounded-md shadow-sm" />
+            <span className="text-xl font-black bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text tracking-tighter">Plan+Note</span>
+          </div>
           {/* RTL: العنصر الأخير في اليسار = جديد (النهاية منطقياً) */}
           <Button onClick={() => setDialogOpen(true)}>
             <Plus className="w-4 h-4 me-2" />

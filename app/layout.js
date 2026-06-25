@@ -12,7 +12,7 @@ const cairo = Cairo({
 });
 
 export const metadata = {
-  title: 'Plan+Note — مفكرتك الذكية للتخطيط والملاحظات',
+  title: 'Plan+Note',
   description: 'تطبيق عربي متكامل يجمع بين الملاحظات النصية ولوحة التخطيط اللانهائية.',
   keywords: ['مفكرة', 'تطبيق ملاحظات عربي', 'لوحة تخطيط لا نهائية', 'Plan Note'],
   openGraph: {

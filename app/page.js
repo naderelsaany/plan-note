@@ -22,7 +22,7 @@ const features = [
 ];
 
 const faqs = [
-  { q: 'هل التطبيق مجاني؟', a: 'نعم، Plan+Note مجاني بالكامل. سجّل بحساب Google وابدأ فوراً.' },
+  { q: 'كيف أبدأ استخدام التطبيق؟', a: 'بكل بساطة، سجّل بحساب Google الخاص بك وابدأ فوراً في تنظيم أفكارك.' },
   { q: 'هل بياناتي آمنة؟', a: 'نعم. بياناتك محفوظة في Firebase مع قواعد أمان تضمن أن لا أحد سواك يصل إلى ملفاتك.' },
   { q: 'هل يعمل بدون إنترنت؟', a: 'جزئياً — الملاحظات والبيانات المُحمّلة مسبقاً متاحة بدون إنترنت، وتُزامن تلقائياً عند عودة الاتصال.' },
   { q: 'ما الفرق بين الملاحظة ولوحة التخطيط؟', a: 'الملاحظة للكتابة النصية. اللوحة للتخطيط البصري الحر بأشكال وأسهم ورسوم.' },
@@ -30,8 +30,8 @@ const faqs = [
 ];
 
 export const metadata = {
-  title: 'Plan+Note | نظّم أفكارك وخطّط مستقبلك',
-  description: 'مفكرة ذكية تجمع الكتابة الحرة ولوحة التخطيط البصري اللانهائية. بالعربية ومجانية بالكامل.',
+  title: 'Plan+Note',
+  description: 'مفكرة ذكية تجمع الكتابة الحرة ولوحة التخطيط البصري اللانهائية. بالعربية.',
 };
 
 export default function LandingPage() {
@@ -41,15 +41,18 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50" dir="rtl">
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <nav className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <span className="text-xl font-bold text-blue-600">Plan+Note</span>
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Plan+Note" className="w-8 h-8 rounded-lg shadow-sm" />
+            <span className="text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text tracking-tighter">Plan+Note</span>
+          </div>
           <LandingAuthButton />
         </nav>
       </header>
 
       <section className="max-w-4xl mx-auto px-4 pt-20 pb-16 text-center">
         <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight mb-6">
-          نظّم أفكارك،{' '}
-          <span className="text-blue-600">خطّط مستقبلك</span>
+          نظّم ملاحظاتك،{' '}
+          <span className="text-blue-600">وخطط مشاريعك بسهولة</span>
         </h1>
         <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
           مفكرة ذكية تجمع الكتابة الحرة ولوحة التخطيط البصري اللانهائية. بالعربية.
@@ -83,9 +86,8 @@ export default function LandingPage() {
       </section>
 
       <section className="bg-blue-600 py-16 text-center">
-        <h2 className="text-3xl font-bold text-white mb-4">جاهز تبدأ؟</h2>
-        <p className="text-blue-100 mb-8 text-lg">مجاني تماماً، بدون بطاقة ائتمان.</p>
-        <LandingAuthButton variant="secondary" size="lg" text="ابدأ الآن مجاناً" />
+        <h2 className="text-3xl font-bold text-white mb-8">جاهز للبدء؟</h2>
+        <LandingAuthButton variant="secondary" size="lg" text="سجل الدخول الآن" />
       </section>
 
       <footer className="bg-gray-900 text-gray-400 text-center py-8">
