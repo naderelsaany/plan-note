@@ -3,8 +3,16 @@ import { MarketingFooter } from '@/components/marketing-footer';
 import { FileText, Layout, Download, Share2, Shield, Zap } from 'lucide-react';
 
 export const metadata = {
-  title: 'المميزات | Plan+Note',
+  title: 'المميزات',
   description: 'اكتشف جميع مميزات تطبيق Plan+Note من ملاحظات نصية، لوحة تخطيط لانهائية، وتصدير عالي الجودة.',
+  alternates: {
+    canonical: '/features',
+  },
+  openGraph: {
+    title: 'المميزات | Plan+Note',
+    description: 'اكتشف جميع مميزات تطبيق Plan+Note من ملاحظات نصية، لوحة تخطيط لانهائية، وتصدير عالي الجودة.',
+    url: 'https://plan-note-psi.vercel.app/features',
+  },
 };
 
 export default function FeaturesPage() {
@@ -42,23 +50,23 @@ export default function FeaturesPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col" dir="rtl">
+    <div className="min-h-screen flex flex-col" dir="rtl">
       <MarketingHeader />
       
       <main className="flex-1 max-w-6xl mx-auto px-4 py-16 w-full">
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">مميزات التطبيق</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-foreground mb-4">مميزات التطبيق</h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             كل الأدوات التي تحتاجها لترتيب فوضى الأفكار، مجمعة في مكان واحد.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {allFeatures.map((f) => (
-            <article key={f.title} className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow border border-gray-100 text-center">
+            <article key={f.title} className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow border border-border text-center">
               <div className="flex justify-center mb-4">{f.icon}</div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">{f.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{f.desc}</p>
+              <h3 className="text-xl font-bold text-foreground mb-3">{f.title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{f.desc}</p>
             </article>
           ))}
         </div>

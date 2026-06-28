@@ -74,6 +74,11 @@ export async function generateMetadata({ params }) {
     description: meta.description,
     alternates: {
       canonical: `https://plan-note-psi.vercel.app/blog/${slug}`
+    },
+    openGraph: {
+      title: meta.title,
+      description: meta.description,
+      url: `https://plan-note-psi.vercel.app/blog/${slug}`,
     }
   };
 }
@@ -90,14 +95,14 @@ export default async function BlogPostPage({ params }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col" dir="rtl">
+    <div className="min-h-screen bg-background flex flex-col" dir="rtl">
       <MarketingHeader />
       
       <main className="flex-1 max-w-3xl mx-auto px-4 py-16 w-full">
-        <Link href="/blog" className="text-blue-600 hover:underline mb-8 inline-block font-bold">
+        <Link href="/blog" className="text-primary hover:underline mb-8 inline-block font-bold">
           &rarr; العودة للمدونة
         </Link>
-        <article className="bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100 prose prose-blue prose-lg max-w-none prose-headings:text-gray-900 prose-a:text-blue-600 hover:prose-a:underline">
+        <article className="bg-card p-8 md:p-12 rounded-3xl shadow-sm border border-border prose prose-blue prose-lg max-w-none prose-headings:text-foreground prose-a:text-primary hover:prose-a:underline dark:prose-invert">
           <ReactMarkdown>{content}</ReactMarkdown>
         </article>
       </main>

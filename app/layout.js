@@ -2,8 +2,8 @@ import { Cairo } from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/sonner';
+import { ThemeProvider } from '@/components/theme-provider';
 
-// الخط يُحمَّل هنا مرة واحدة فقط عبر next/font (الأفضل للأداء)
 const cairo = Cairo({
   subsets: ['arabic', 'latin'],
   weight: ['400', '500', '600', '700'],
@@ -13,9 +13,17 @@ const cairo = Cairo({
 
 export const metadata = {
   metadataBase: new URL('https://plan-note-psi.vercel.app'),
-  title: 'Plan+Note',
+  title: {
+    default: 'Plan+Note | مفكرة ذكية ولوحة تخطيط',
+    template: '%s | Plan+Note',
+  },
   description: 'تطبيق عربي متكامل يجمع بين الملاحظات النصية ولوحة التخطيط اللانهائية.',
-  keywords: ['مفكرة', 'تطبيق ملاحظات عربي', 'لوحة تخطيط لا نهائية', 'Plan Note'],
+  keywords: [
+    'مفكرة', 'مفكرة ذكية', 'تطبيق ملاحظات عربي', 'لوحة تخطيط لا نهائية', 
+    'Plan Note', 'بديل نوشن عربي', 'تنظيم الوقت', 'إدارة المهام', 
+    'رسم خرائط ذهنية', 'Notion alternative Arabic', 'أدوات إنتاجية للطلاب',
+    'تطبيق إنتاجية للأعمال', 'ملاحظات سحابية'
+  ],
   alternates: {
     canonical: '/',
   },
@@ -28,7 +36,7 @@ export const metadata = {
     locale: 'ar_EG',
     images: [
       {
-        url: '/icon-512x512.png',
+        url: '/icon-512x512.png', // Temporary until OG image is fully designed
         width: 512,
         height: 512,
         alt: 'Plan+Note Cover Image',
@@ -36,7 +44,7 @@ export const metadata = {
     ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'Plan+Note — مفكرتك الذكية',
     description: 'نظّم أفكارك وخطّط مشاريعك باللغة العربية',
     images: ['/icon-512x512.png'],
@@ -47,43 +55,62 @@ export const metadata = {
   },
 };
 
-/**
- * RootLayout Component
- * 
- * Acts as the top-level wrapper for the entire Next.js application.
- * It configures the Arabic font (Cairo), sets the RTL text direction,
- * and initializes the AuthProvider and Toaster components.
- * 
- * @param {Object} props - The component props.
- * @param {React.ReactNode} props.children - The child components to render.
- * @returns {JSX.Element} The global HTML structure.
- */
 export default function RootLayout({ children }) {
   return (
-    <html lang="ar" dir="rtl" className={cairo.variable}>
+    <html lang="ar" dir="rtl" className={cairo.variable} suppressHydrationWarning>
       <head>
-        {/* Schema Markup — الطريقة المُفضلة في App Router */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'SoftwareApplication',
-              name: 'Plan+Note',
-              applicationCategory: 'ProductivityApplication',
-              operatingSystem: 'Web',
-              description: 'تطبيق ويب عربي للملاحظات ولوحة التخطيط اللانهائية',
-              offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-              inLanguage: 'ar',
-            }),
+            __html: JSON.stringify([
+              {
+                '@context': 'https://schema.org',
+                '@type': 'WebSite',
+                name: 'Plan+Note',
+                alternateName: 'بلان نوت',
+                url: 'https://plan-note-psi.vercel.app',
+                description: 'تطبيق عربي متكامل يجمع بين الملاحظات النصية ولوحة التخطيط اللانهائية.',
+                inLanguage: 'ar',
+                potentialAction: {
+                  '@type': 'SearchAction',
+                  target: 'https://plan-note-psi.vercel.app/blog?q={search_term_string}',
+                  'query-input': 'required name=search_term_string'
+                }
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: 'Plan+Note',
+                url: 'https://plan-note-psi.vercel.app',
+                logo: 'https://plan-note-psi.vercel.app/icon-512x512.png',
+                sameAs: []
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'SoftwareApplication',
+                name: 'Plan+Note',
+                applicationCategory: 'ProductivityApplication',
+                operatingSystem: 'Web',
+                description: 'تطبيق ويب عربي للملاحظات ولوحة التخطيط اللانهائية',
+                offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+                inLanguage: 'ar',
+              }
+            ]),
           }}
         />
       </head>
-      <body className="font-arabic antialiased">
-        <AuthProvider>
-          {children}
-          <Toaster />
-        </AuthProvider>
+      <body className="font-arabic antialiased min-h-screen bg-background text-foreground">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            {children}
+            <Toaster />
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

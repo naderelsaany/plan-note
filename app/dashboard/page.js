@@ -22,16 +22,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FileText, Plus, Trash2, Edit3, LogOut, Loader2 } from 'lucide-react';
+import { ThemeToggle } from '@/components/ui/theme-toggle';
 
-/**
- * DashboardPage Component
- * 
- * Renders the main dashboard for authenticated users.
- * Displays a list of their notes and canvas files, providing options
- * to create new files, rename them, or delete them.
- * 
- * @returns {JSX.Element|null} The rendered dashboard or null if loading/unauthenticated.
- */
 export default function DashboardPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -76,7 +68,6 @@ export default function DashboardPage() {
     const { id, error } = await createDocument(user.uid, newTitle.trim(), newType);
     setCreating(false);
     if (id) {
-      // ⚠️ احفظ النوع قبل reset — لأن setState غير متزامن
       const type = newType;
       setDialogOpen(false);
       setNewTitle('');
@@ -118,7 +109,6 @@ export default function DashboardPage() {
     router.push(`/${doc.type === 'note' ? 'note' : 'canvas'}/${doc.id}`);
   };
 
-  // تنسيق التاريخ بصيغة عربية مختصرة
   const formatDate = (date) => {
     try {
       return new Intl.DateTimeFormat('ar-EG', {
@@ -134,18 +124,17 @@ export default function DashboardPage() {
 
   if (loading || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
+    <div className="min-h-screen bg-background" dir="rtl">
+      <header className="bg-background/80 backdrop-blur-md border-b border-border sticky top-0 z-10">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-          {/* RTL: العنصر الأول في اليمين = خروج (البداية منطقياً) */}
-          <Button variant="ghost" onClick={handleSignOut} className="text-gray-600">
+          <Button variant="ghost" onClick={handleSignOut} className="text-muted-foreground hover:text-foreground">
             <LogOut className="w-4 h-4 me-2" />
             خروج
           </Button>
@@ -153,28 +142,30 @@ export default function DashboardPage() {
             <img src="/logo.png" alt="Plan+Note" className="w-6 h-6 rounded-md shadow-sm" />
             <span className="text-xl font-black bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text tracking-tighter">Plan+Note</span>
           </div>
-          {/* RTL: العنصر الأخير في اليسار = جديد (النهاية منطقياً) */}
-          <Button onClick={() => setDialogOpen(true)}>
-            <Plus className="w-4 h-4 me-2" />
-            جديد
-          </Button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Button onClick={() => setDialogOpen(true)}>
+              <Plus className="w-4 h-4 me-2" />
+              جديد
+            </Button>
+          </div>
         </div>
       </header>
 
       <main className="max-w-5xl mx-auto px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
+          <h1 className="text-2xl font-bold text-foreground">
             أهلاً، {user.displayName?.split(' ')[0]} 👋
           </h1>
-          <p className="text-gray-500 mt-1">ملفاتك المحفوظة</p>
+          <p className="text-muted-foreground mt-1">ملفاتك المحفوظة</p>
         </div>
 
         {docsLoading ? (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : documents.length === 0 ? (
-          <div className="text-center py-20 text-gray-400">
+          <div className="text-center py-20 text-muted-foreground">
             <FileText className="w-16 h-16 mx-auto mb-4 opacity-30" />
             <p className="text-lg">لا يوجد ملفات بعد</p>
             <p className="text-sm mt-2">اضغط "جديد" لإنشاء أول ملف</p>
@@ -182,26 +173,26 @@ export default function DashboardPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {documents.map((doc) => (
-              <div key={doc.id} className="bg-white rounded-2xl border border-gray-200 p-5 hover:shadow-md transition-shadow flex flex-col">
+              <div key={doc.id} className="bg-card rounded-2xl border border-border p-5 hover:border-primary/50 transition-colors flex flex-col">
                 <div className="flex items-center gap-3 cursor-pointer flex-1" onClick={() => handleOpen(doc)}>
                   <span className="text-2xl">{doc.type === 'canvas' ? '🎨' : '📝'}</span>
                   <div className="flex-1 min-w-0">
-                    <h2 className="font-semibold text-gray-800 truncate">{doc.title}</h2>
-                    <p className="text-xs text-gray-400 mt-1">
+                    <h2 className="font-semibold text-card-foreground truncate">{doc.title}</h2>
+                    <p className="text-xs text-muted-foreground mt-1">
                       {doc.type === 'canvas' ? 'لوحة تخطيط' : 'ملاحظة نصية'}
                     </p>
                     {doc.updatedAt?.toDate && (
-                      <p className="text-[11px] text-gray-400 mt-1">
+                      <p className="text-[11px] text-muted-foreground mt-1">
                         آخر تعديل: {formatDate(doc.updatedAt.toDate())}
                       </p>
                     )}
                   </div>
                 </div>
-                <div className="flex gap-2 mt-4 border-t border-gray-100 pt-4">
-                  <Button variant="ghost" size="sm" className="flex-1 text-blue-600" onClick={() => handleOpen(doc)}>
+                <div className="flex gap-2 mt-4 border-t border-border/50 pt-4">
+                  <Button variant="ghost" size="sm" className="flex-1 text-primary hover:text-primary hover:bg-primary/10" onClick={() => handleOpen(doc)}>
                     <Edit3 className="w-4 h-4 me-1" /> فتح
                   </Button>
-                  <Button variant="ghost" size="sm" className="flex-1 text-red-500" onClick={() => triggerDelete(doc.id)}>
+                  <Button variant="ghost" size="sm" className="flex-1 text-destructive hover:text-destructive hover:bg-destructive/10" onClick={() => triggerDelete(doc.id)}>
                     <Trash2 className="w-4 h-4 me-1" /> حذف
                   </Button>
                 </div>
@@ -235,17 +226,17 @@ export default function DashboardPage() {
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => setNewType('note')}
-                  className={`p-4 rounded-xl border-2 text-center transition-all ${newType === 'note' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}
+                  className={`p-4 rounded-xl border-2 text-center transition-all ${newType === 'note' ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/50'}`}
                 >
                   <span className="text-2xl block mb-1">📝</span>
-                  <span className="text-sm font-medium text-gray-700">ملاحظة</span>
+                  <span className="text-sm font-medium text-foreground">ملاحظة</span>
                 </button>
                 <button
                   onClick={() => setNewType('canvas')}
-                  className={`p-4 rounded-xl border-2 text-center transition-all ${newType === 'canvas' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300'}`}
+                  className={`p-4 rounded-xl border-2 text-center transition-all ${newType === 'canvas' ? 'border-purple-500 bg-purple-500/10' : 'border-border hover:border-purple-500/50'}`}
                 >
                   <span className="text-2xl block mb-1">🎨</span>
-                  <span className="text-sm font-medium text-gray-700">تخطيط</span>
+                  <span className="text-sm font-medium text-foreground">تخطيط</span>
                 </button>
               </div>
             </div>
@@ -264,7 +255,7 @@ export default function DashboardPage() {
         <AlertDialogContent dir="rtl">
           <AlertDialogHeader>
             <AlertDialogTitle className="text-right">تأكيد حذف الملف</AlertDialogTitle>
-            <AlertDialogDescription className="text-right mt-2 text-gray-500">
+            <AlertDialogDescription className="text-right mt-2">
               هل أنت متأكد من قرارك؟ سيتم حذف هذا الملف نهائياً ولا يمكن التراجع عن هذا الإجراء بأي شكل.
             </AlertDialogDescription>
           </AlertDialogHeader>

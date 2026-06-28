@@ -2,41 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-/* دعم RTL الأساسي — Tailwind v3 يدعمه نيتيف، هذا للتأكيد فقط */
+/* دعم RTL الأساسي */
 [dir="rtl"] {
   text-align: right;
 }
 
-:root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 221.2 83.2% 53.3%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 221.2 83.2% 53.3%;
-  --radius: 0.5rem;
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 220 15% 5%; /* #0a0d14 - Deep dark background */
+    --foreground: 210 40% 98%; /* #f8fafc */
+    --card: 220 15% 8%; /* #11151f - Slightly lighter card */
+    --card-foreground: 210 40% 98%;
+    --popover: 220 15% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 234 61% 60%; /* Linear-like indigo */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 234 61% 60%;
+  }
 }
 
-* {
-  border-color: hsl(var(--border));
-}
-
-body {
-  /* الخط يأتي من next/font في layout.js — لا نستورده هنا مرة ثانية */
-  font-family: var(--font-cairo), sans-serif;
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    font-family: var(--font-cairo), sans-serif;
+    @apply bg-background text-foreground;
+  }
 }
