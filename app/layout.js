@@ -13,6 +13,7 @@ const cairo = Cairo({
 
 export const metadata = {
   metadataBase: new URL('https://plan-note-psi.vercel.app'),
+  applicationName: 'Plan+Note',
   title: {
     default: 'Plan+Note | مفكرة ذكية ولوحة تخطيط',
     template: '%s | Plan+Note',
@@ -30,7 +31,7 @@ export const metadata = {
   openGraph: {
     title: 'Plan+Note — مفكرتك الذكية',
     description: 'نظّم أفكارك وخطّط مشاريعك باللغة العربية',
-    url: 'https://plan-note-psi.vercel.app',
+    url: 'https://plan-note-psi.vercel.app/',
     siteName: 'Plan+Note',
     type: 'website',
     locale: 'ar_EG',
@@ -68,20 +69,15 @@ export default function RootLayout({ children }) {
                 '@type': 'WebSite',
                 name: 'Plan+Note',
                 alternateName: 'بلان نوت',
-                url: 'https://plan-note-psi.vercel.app',
+                url: 'https://plan-note-psi.vercel.app/',
                 description: 'تطبيق عربي متكامل يجمع بين الملاحظات النصية ولوحة التخطيط اللانهائية.',
-                inLanguage: 'ar',
-                potentialAction: {
-                  '@type': 'SearchAction',
-                  target: 'https://plan-note-psi.vercel.app/blog?q={search_term_string}',
-                  'query-input': 'required name=search_term_string'
-                }
+                inLanguage: 'ar'
               },
               {
                 '@context': 'https://schema.org',
                 '@type': 'Organization',
                 name: 'Plan+Note',
-                url: 'https://plan-note-psi.vercel.app',
+                url: 'https://plan-note-psi.vercel.app/',
                 logo: 'https://plan-note-psi.vercel.app/icon-512x512.png',
                 sameAs: []
               },
