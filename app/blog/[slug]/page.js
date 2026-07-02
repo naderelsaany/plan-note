@@ -19,53 +19,54 @@ export async function generateStaticParams() {
   }
 }
 
+const metadataMap = {
+  'best-note-taking-methods-2026': {
+    title: 'أفضل طرق تدوين الملاحظات في 2026',
+    description: 'اكتشف أفضل طرق تدوين الملاحظات في 2026: من الطرق التقليدية إلى الرقمية، وكيف تختار الطريقة المناسبة لك.',
+  },
+  'linear-notes-vs-mindmaps': {
+    title: 'الفرق بين الملاحظات الخطية والخرائط الذهنية',
+    description: 'مقارنة شاملة بين الملاحظات الخطية والخرائط الذهنية: أيهما أفضل للتنظيم والإبداع؟',
+  },
+  'how-to-build-pwa': {
+    title: 'كيف تبني تطبيق PWA ناجح؟ دليل شامل 2026',
+    description: 'دليل خطوة بخطوة لبناء تطبيق PWA ناجح: من المفهوم إلى النشر مع أفضل الممارسات.',
+  },
+  'best-arabic-note-apps': {
+    title: 'أفضل تطبيقات الملاحظات العربية في 2026',
+    description: 'مقارنة بين أفضل تطبيقات الملاحظات العربية المتاحة في 2026 مع مميزات وعيوب كل تطبيق.',
+  },
+  'free-planning-tools': {
+    title: 'أفضل أدوات التخطيط المجانية للمشاريع الصغيرة',
+    description: 'دليل بأفضل أدوات التخطيط المجانية للمشاريع الصغيرة والأفراد مع نصائح للاستخدام الأمثل.',
+  },
+  'mindmap-productivity-impact': {
+    title: 'تأثير الخرائط الذهنية على الإنتاجية',
+    description: 'استكشف السر العلمي وراء الخرائط الذهنية وكيف تساعد دماغك على مضاعفة سرعته وإنتاجيته.',
+  },
+  'time-management-for-students-and-employees': {
+    title: 'كيفية إدارة الوقت بفعالية للطلاب والموظفين',
+    description: 'استراتيجيات عملية لعام 2026 للتغلب على ضيق الوقت والموازنة بين العمل والحياة الشخصية.',
+  },
+  'visual-organization-power': {
+    title: 'قوة التنظيم البصري للمعلومات',
+    description: 'كيف تفكر وتخطط بعينيك؟ فوائد استخدام المخططات واللوحات اللانهائية في تبسيط المعلومات.',
+  },
+  'productivity-tools-guide-2026': {
+    title: 'دليل شامل لأدوات الإنتاجية في 2026',
+    description: 'كيف تبني نظام تشغيل شخصي متكامل لزيادة الإنتاجية وتقليل التشتت بين التطبيقات؟',
+  },
+  'turning-ideas-into-action-plans': {
+    title: 'كيفية تحويل الأفكار إلى خطط عمل قابلة للتنفيذ',
+    description: 'خطوات عملية لتحويل الأفكار العشوائية من مجرد أحلام إلى خطط عمل واضحة باستخدام أدوات ذكية.',
+  },
+};
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const metadataMap = {
-    'best-note-taking-methods-2026': {
-      title: 'أفضل طرق تدوين الملاحظات في 2026 | Plan+Note',
-      description: 'اكتشف أفضل طرق تدوين الملاحظات في 2026: من الطرق التقليدية إلى الرقمية، وكيف تختار الطريقة المناسبة لك.',
-    },
-    'linear-notes-vs-mindmaps': {
-      title: 'الفرق بين الملاحظات الخطية والخرائط الذهنية | Plan+Note',
-      description: 'مقارنة شاملة بين الملاحظات الخطية والخرائط الذهنية: أيهما أفضل للتنظيم والإبداع؟',
-    },
-    'how-to-build-pwa': {
-      title: 'كيف تبني تطبيق PWA ناجح؟ دليل شامل 2026 | Plan+Note',
-      description: 'دليل خطوة بخطوة لبناء تطبيق PWA ناجح: من المفهوم إلى النشر مع أفضل الممارسات.',
-    },
-    'best-arabic-note-apps': {
-      title: 'أفضل تطبيقات الملاحظات العربية في 2026 | Plan+Note',
-      description: 'مقارنة بين أفضل تطبيقات الملاحظات العربية المتاحة في 2026 مع مميزات وعيوب كل تطبيق.',
-    },
-    'free-planning-tools': {
-      title: 'أفضل أدوات التخطيط المجانية للمشاريع الصغيرة | Plan+Note',
-      description: 'دليل بأفضل أدوات التخطيط المجانية للمشاريع الصغيرة والأفراد مع نصائح للاستخدام الأمثل.',
-    },
-    'mindmap-productivity-impact': {
-      title: 'تأثير الخرائط الذهنية على الإنتاجية | Plan+Note',
-      description: 'استكشف السر العلمي وراء الخرائط الذهنية وكيف تساعد دماغك على مضاعفة سرعته وإنتاجيته.',
-    },
-    'time-management-for-students-and-employees': {
-      title: 'كيفية إدارة الوقت بفعالية للطلاب والموظفين | Plan+Note',
-      description: 'استراتيجيات عملية لعام 2026 للتغلب على ضيق الوقت والموازنة بين العمل والحياة الشخصية.',
-    },
-    'visual-organization-power': {
-      title: 'قوة التنظيم البصري للمعلومات | Plan+Note',
-      description: 'كيف تفكر وتخطط بعينيك؟ فوائد استخدام المخططات واللوحات اللانهائية في تبسيط المعلومات.',
-    },
-    'productivity-tools-guide-2026': {
-      title: 'دليل شامل لأدوات الإنتاجية في 2026 | Plan+Note',
-      description: 'كيف تبني نظام تشغيل شخصي متكامل لزيادة الإنتاجية وتقليل التشتت بين التطبيقات؟',
-    },
-    'turning-ideas-into-action-plans': {
-      title: 'كيفية تحويل الأفكار إلى خطط عمل قابلة للتنفيذ | Plan+Note',
-      description: 'خطوات عملية لتحويل الأفكار العشوائية من مجرد أحلام إلى خطط عمل واضحة باستخدام أدوات ذكية.',
-    }
-  };
 
   const meta = metadataMap[slug] || {
-    title: `المقال | Plan+Note`,
+    title: 'المقال',
     description: 'مقال تفصيلي من مدونة تطبيق Plan+Note.',
   };
 
@@ -73,19 +74,24 @@ export async function generateMetadata({ params }) {
     title: meta.title,
     description: meta.description,
     alternates: {
-      canonical: `https://plan-note-psi.vercel.app/blog/${slug}`
+      canonical: `/blog/${slug}`,
     },
     openGraph: {
       title: meta.title,
       description: meta.description,
-      url: `https://plan-note-psi.vercel.app/blog/${slug}`,
-    }
+      url: `/blog/${slug}`,
+    },
   };
 }
 
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
-  
+
+  const meta = metadataMap[slug] || {
+    title: 'المقال',
+    description: 'مقال تفصيلي من مدونة تطبيق Plan+Note.',
+  };
+
   const contentPath = path.join(process.cwd(), 'content', 'blog', `${slug}.md`);
   let content = '';
   try {
@@ -94,8 +100,33 @@ export default async function BlogPostPage({ params }) {
     content = '# عذراً، المقال غير متوفر حالياً\nهذا المقال قيد الكتابة وسيكون متاحاً قريباً.';
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: meta.title,
+    description: meta.description,
+    url: `https://plan-note-psi.vercel.app/blog/${slug}`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'Plan+Note',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://plan-note-psi.vercel.app/icon-512x512.png',
+      },
+    },
+    inLanguage: 'ar',
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://plan-note-psi.vercel.app/blog/${slug}`,
+    },
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col" dir="rtl">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <MarketingHeader />
       
       <main className="flex-1 max-w-3xl mx-auto px-4 py-16 w-full">

@@ -16,8 +16,8 @@ export default function Error({ error, reset }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-4 p-4 text-center" dir="rtl">
       <AlertTriangle className="w-16 h-16 text-red-400" />
-      <h2 className="text-2xl font-bold text-gray-800">حدث خطأ ما</h2>
-      <p className="text-gray-500 max-w-md">
+      <h1 className="text-2xl font-bold text-foreground">حدث خطأ ما</h1>
+      <p className="text-muted-foreground max-w-md">
         نعتذر، حدث خطأ غير متوقع. يمكنك المحاولة مرة أخرى أو العودة للرئيسية.
       </p>
       <div className="flex gap-3">

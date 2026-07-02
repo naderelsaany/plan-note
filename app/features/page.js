@@ -61,6 +61,7 @@ export default function FeaturesPage() {
           </p>
         </div>
 
+        <h2 className="sr-only">قائمة المميزات</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {allFeatures.map((f) => (
             <article key={f.title} className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow border border-border text-center">

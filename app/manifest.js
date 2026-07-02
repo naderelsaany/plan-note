@@ -2,6 +2,8 @@ export default function manifest() {
   return {
     name: 'Plan+Note',
     short_name: 'Plan+Note',
+    lang: 'ar',
+    dir: 'rtl',
     description: 'تطبيق عربي متكامل يجمع بين الملاحظات النصية ولوحة التخطيط اللانهائية.',
     start_url: '/',
     display: 'standalone',
